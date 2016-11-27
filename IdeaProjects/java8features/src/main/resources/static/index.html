@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Streams</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script>
+        var app = angular.module("streams", []);
+        app.directive('ngEnter', function() {
+            return function(scope, element, attrs) {
+                element.bind("keydown keypress", function(event) {
+                    if(event.which === 13) {
+                        scope.$apply(function(){
+                            scope.$eval(attrs.ngEnter);
+                        });
+
+                        event.preventDefault();
+                    }
+                });
+            };
+        });
+        app.controller("streamsCtl", function($scope, $http) {
+            $scope.loadData = function () {
+                $http.get('/persons/v1', {params:{name : $scope.name, title : $scope.title, sort: $scope.sort}}).success(function (res) {$scope.responseV1 = res});
+                $http.get('/persons/v1f', {params:{name : $scope.name, title : $scope.title, sort: $scope.sort}}).success(function (res) {$scope.responseV1f = res});
+                $http.get('/persons/v2', {params:{name : $scope.name, title : $scope.title, sort: $scope.sort}}).success(function (res) {$scope.responseV2 = res});
+                $http.get('/persons/v3', {params:{name : $scope.name, title : $scope.title, sort: $scope.sort}}).success(function (res) {$scope.responseV3 = res});
+            };
+            $scope.loadData();
+        });
+    </script>
+</head>
+<body ng-app="streams">
+    <div class="container" ng-controller="streamsCtl">
+        <div class="row">
+            <h2>Controls</h2>
+            <div class="form-inline input-group">
+                <div class="form-group">
+                    <input type="text" class="form-control" ng-enter="loadData()" ng-model="name" placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" ng-enter="loadData()" ng-model="title" placeholder="Job Title">
+                </div>
+                <div class="form-group">
+                    <select ng-model="sort" class="form-control">
+                        <option value="">---Please select sorting---</option>
+                        <option value="firstName">First Name</option>
+                        <option value="lastName">Last Name</option>
+                        <option value="jobTitle">Job Title</option>
+                        <option value="age">Age</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="button" class="btn btn-primary" ng-click="loadData()" value="Search" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Plain Java Simple {{responseV1.prettyTime}}</h2>
+            <div class="col-md-8">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Job Title</th>
+                        <th>Age</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="person in responseV1.persons">
+                        <td>{{person.firstName}}</td>
+                        <td>{{person.lastName}}</td>
+                        <td>{{person.jobTitle}}</td>
+                        <td>{{person.age}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Stat</th>
+                        <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="stat in responseV1.stats">
+                        <td>{{stat.name}}</td>
+                        <td>{{stat.value}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Plain Java Simple with counter {{responseV1f.prettyTime}}</h2>
+            <div class="col-md-8">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Job Title</th>
+                        <th>Age</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="person in responseV1f.persons">
+                        <td>{{person.firstName}}</td>
+                        <td>{{person.lastName}}</td>
+                        <td>{{person.jobTitle}}</td>
+                        <td>{{person.age}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Stat</th>
+                        <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="stat in responseV1f.stats">
+                        <td>{{stat.name}}</td>
+                        <td>{{stat.value}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Stream {{responseV2.prettyTime}}</h2>
+            <div class="col-md-8">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Job Title</th>
+                        <th>Age</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="person in responseV2.persons">
+                        <td>{{person.firstName}}</td>
+                        <td>{{person.lastName}}</td>
+                        <td>{{person.jobTitle}}</td>
+                        <td>{{person.age}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Stat</th>
+                        <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="stat in responseV2.stats">
+                        <td>{{stat.name}}</td>
+                        <td>{{stat.value}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Parallel Stream {{responseV3.prettyTime}}</h2>
+            <div class="col-md-8">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Job Title</th>
+                        <th>Age</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="person in responseV3.persons">
+                        <td>{{person.firstName}}</td>
+                        <td>{{person.lastName}}</td>
+                        <td>{{person.jobTitle}}</td>
+                        <td>{{person.age}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Stat</th>
+                        <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="stat in responseV3.stats">
+                        <td>{{stat.name}}</td>
+                        <td>{{stat.value}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
