@@ -13,7 +13,7 @@ public class CommandLineDemo {
     }
 
     private void chooseCommand() throws IOException {
-        System.out.println("Choose any command like this: \"1 - cd\", \"2 - pwd\", \"3 - ls\", \"4 - find\" or \"5 - exit\": ");
+        System.out.println("Choose any command: \"1 - cd\", \"2 - pwd\", \"3 - ls\", \"4 - find\" or \"5 - exit\": ");
 
         while (command != 5) {
             command = System.in.read();

@@ -1,9 +1,9 @@
 package homework4.Task1;
 
-class PwdCommand {
+public class PwdCommand {
 
     void getWorkingDirectory() {
 
-        System.out.println("Working Directory: " + LsCommand.getCurrentPath());
+        System.out.println("Working Directory:  " + LsCommand.getCurrentPath());
     }
 }

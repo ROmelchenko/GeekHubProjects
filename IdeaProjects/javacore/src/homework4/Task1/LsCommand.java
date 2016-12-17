@@ -8,13 +8,13 @@ abstract class LsCommand {
 
     static void getFiles() {
 
-        File f;
+        File file;
         File[] paths;
 
         try {
 
-            f = new File(getCurrentPath());
-            paths = f.listFiles();
+            file = new File(getCurrentPath());
+            paths = file.listFiles();
 
             for (File path : paths) {
                 System.out.println(path);

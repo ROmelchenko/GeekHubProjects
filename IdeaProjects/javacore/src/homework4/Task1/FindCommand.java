@@ -20,7 +20,7 @@ abstract class FindCommand {
                     int lastIndex = name.lastIndexOf('.');
                     String str = name.substring(lastIndex);
 
-                    if (str.equals(".docx")) {
+                    if (str.equals(".txt")) {
 
                         return true;
                     }

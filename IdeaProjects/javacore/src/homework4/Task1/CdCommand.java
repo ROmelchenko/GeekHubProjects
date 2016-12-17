@@ -10,6 +10,7 @@ public class CdCommand {
         File directory;
 
         do {
+
             System.out.print("Input path to folder: ");
             Scanner inputDirectory = new Scanner(System.in);
             directory = new File(inputDirectory.nextLine());
